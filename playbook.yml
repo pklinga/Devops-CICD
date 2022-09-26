@@ -1,0 +1,36 @@
+- hosts: "webservers"
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: ansi user letrehozasa
+      user:
+        name: ansi
+        comment: "Ansi Bacsi"
+        password: "$6$xyz$lJxkPM4dnGmNYdI6ocoEijwTdcS48CUg.X9IrXFdwP0MuCibI.NNbnWAWln.6fIFO//XdvA4dSKuF/TFPo0v4."
+    - name: Bash beallitasa alap shell-kent
+      command: chsh -s /usr/local/bin/bash ansi
+    - name: ansi sudo jog beallitas
+      lineinfile:
+        path: "/etc/sudoers"
+        state: present
+        regexp: "^ansi"
+        line: "ansi       ALL=(ALL) NOPASSWD:ALL"
+        validate: /usr/sbin/visudo -cf %s
+    - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+      community.crypto.openssh_keypair:
+        path: /tmp/id_ssh_rsa
+    - name: Copy public key
+      copy:
+        src: /tmp/id_ssh_rsa/*.pub
+        dest: ~/.ssh/id_rsa
+    - name: Epel-release telepitese, update
+      dnf:
+        name:
+          - epel-release
+          - update
+        state: latest
+    - name: ujrainditas
+      systemctl:
+        name:
+          - restart -h now

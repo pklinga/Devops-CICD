@@ -1,2 +1,4 @@
-# Devops-CICD
-CI/CD exercise in Devops course
+# CICD_new
+
+- Practicing CI/CD on GitLab
+- Implementing Python
